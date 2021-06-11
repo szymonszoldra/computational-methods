@@ -53,16 +53,17 @@ double max_error(double* errors, const int steps) {
         current_max = std::max(current_max, fabs(errors[i]));
     }
 
+    delete[] errors;
     return current_max;
 }
 
 double discretization(const double h, const int steps, const bool numerow) {
-    double *Lower =    new double[steps];
-    double *Diagonal = new double[steps];
-    double *Upper =    new double[steps];
-    double *vector_b = new double[steps];
-    double *vector_x = new double[steps];
-    double *errors =   new double[steps];
+    double *Lower     = new double[steps];
+    double *Diagonal  = new double[steps];
+    double *Upper     = new double[steps];
+    double *vector_b  = new double[steps];
+    double *vector_x  = new double[steps];
+    double *errors    = new double[steps];
 
     Lower[0] = 0.0;
     Diagonal[0] = BETA - ALPHA / h;
@@ -114,6 +115,12 @@ double discretization(const double h, const int steps, const bool numerow) {
         errors[i] = fabs(vector_x[i] - analytical(xi));
         xi += h;
     }
+
+    delete[] Lower;
+    delete[] Diagonal;
+    delete[] Upper;
+    delete[] vector_b;
+    delete[] vector_x;
 
     return max_error(errors, steps);
 }
